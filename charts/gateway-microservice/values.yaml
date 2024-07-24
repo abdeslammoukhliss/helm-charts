@@ -186,7 +186,7 @@ extraVolumeMounts:
 extraVolumes:
 #  - name: extra-config
 #    configMap:
-#      name: extra-configmap
+#      name: extra-configmap.yaml
 
 autoscaling:
   enabled: false  # Whether to enable horizontal pod autoscaling

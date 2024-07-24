@@ -87,7 +87,7 @@ docker:
 
 envFrom:
   - configMapRef:
-      name: configmap  # Reference to the ConfigMap for environment variables
+      name: configmap.yaml  # Reference to the ConfigMap for environment variables
   - secretRef:
       name: secret  # Reference to the Secret for environment variables
 
@@ -186,7 +186,7 @@ extraVolumeMounts:
 extraVolumes:
 #  - name: extra-config
 #    configMap:
-#      name: extra-configmap
+#      name: extra-configmap.yaml
 
 autoscaling:
   enabled: false  # Whether to enable horizontal pod autoscaling
