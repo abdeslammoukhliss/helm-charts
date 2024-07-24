@@ -34,7 +34,7 @@ spec:
     spec:
       restartPolicy: Always
       imagePullSecrets:
-        - name: {{ include "spring-microservice.fullname" . }}-docker-secret
+        - name: {{ include "spring-microservice.docker-secret.name" . }}
       serviceAccountName: {{ include "spring-microservice.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}

@@ -78,6 +78,7 @@ labels:
 secret:
   values:
 
+
 docker:
   secretName: docker-registry  # Name of the Docker registry secret
 

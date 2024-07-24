@@ -5,6 +5,18 @@ Expand the name of the chart.
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
+{{- define "gateway-microservice.docker-secret.prefix" -}}
+docker-secret
+{{- end -}}
+
+{{- define "gateway-microservice.docker-secret.name" -}}
+{{- $prefix := include "gateway-microservice.docker-secret.prefix" . -}}
+{{- $defaultName := default (include "gateway-microservice.name" .) .Values.docker.secretName -}}
+{{- printf "%s-%s" $prefix $defaultName -}}
+{{- end -}}
+
+
+
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
