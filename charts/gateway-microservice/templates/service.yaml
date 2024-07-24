@@ -1,0 +1,34 @@
+{{- with .Values.service }}
+  {{- if .enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gateway-microservice.fullname" $ }}
+  labels:
+  {{- include "gateway-microservice.labels" $ | nindent 4 }}
+  {{- if .labels }}
+  {{- toYaml .labels | nindent 4 }}
+  {{- end }}
+  namespace: {{ $.Values.namespace}}
+spec:
+  type: {{ .type }}
+  ports:
+    - port: {{ .httpPort }}
+      targetPort: http
+      protocol: TCP
+      name: http
+      {{- if and (eq "NodePort" .type) .httpNodePort }}
+      nodePort: {{ .httpNodePort }}
+    {{- end }}
+    - port: {{ .managementPort }}
+      targetPort: http-management
+      protocol: TCP
+      name: http-management
+      {{- if and (eq "NodePort" .type) .managementNodePort }}
+      nodePort: {{ .managementNodePort }}
+  {{- end }}
+  selector:
+  {{- include "gateway-microservice.selectorLabels" $ | nindent 4 }}
+{{- end }}
+{{- end }}
