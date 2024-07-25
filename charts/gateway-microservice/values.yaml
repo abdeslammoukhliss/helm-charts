@@ -4,13 +4,13 @@
 
 appVersion: 0.0.1  # Version of the application
 
-replicaCount: 3  # Number of pod replicas to run
+replicaCount: 1  # Number of pod replicas to run
 
 namespace: default  # Kubernetes namespace where the application will be deployed
 
 image:
   repository: abdomokh/gateway-service  # Docker image repository for the application
-  pullPolicy: Always  # Image pull policy (Always means always pull the image)
+  pullPolicy: IfNotPresent  # Image pull policy (Always means always pull the image)
   tag: latest  # Docker image tag
 
 imagePullSecrets:
@@ -121,6 +121,28 @@ config:
           enabled: true
         readinessState:
           enabled: true
+    spring:
+      application:
+        name: gateway-service
+      cloud:
+        gateway:
+          routes:
+            - id: users-service
+              uri: lb://users-service
+              predicates:
+                - Path=/users/**
+            - id: expenses-service
+              uri: lb://expenses-service
+              predicates:
+                - Path=/expenses/**
+            - id: categories-service
+              uri: lb://categories-service
+              predicates:
+                - Path=/categories/**
+        kubernetes:
+          discovery:
+            enabled: true
+            discovery-server-url: http://192.168.49.2:8443
 
 command:
 #  - "java"
@@ -173,11 +195,11 @@ startupProbe:
 
 resources:
   limits:
-    cpu: 200m  # Maximum CPU resources the container can use
-    memory: 512Mi  # Maximum memory resources the container can use
+    cpu: 600m  # Maximum CPU resources the container can use
+    memory: 912Mi  # Maximum memory resources the container can use
   requests:
-    cpu: 100m  # CPU resources requested for the container
-    memory: 256Mi  # Memory resources requested for the container
+    cpu: 400m  # CPU resources requested for the container
+    memory: 556Mi  # Memory resources requested for the container
 
 extraVolumeMounts:
 #  - name: extra-config

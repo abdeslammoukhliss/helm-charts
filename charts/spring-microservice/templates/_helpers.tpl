@@ -11,8 +11,8 @@ docker-secret
 
 {{- define "spring-microservice.docker-secret.name" -}}
 {{- $prefix := include "spring-microservice.docker-secret.prefix" . -}}
-{{- $defaultName := default (include "spring-microservice.name" .) .Values.docker.secretName -}}
-{{- printf "%s-%s" $prefix $defaultName -}}
+{{- $defaultName := default (include "spring-microservice.name" .) -}}
+{{- printf "%s-%s"  $defaultName $prefix -}}
 {{- end -}}
 
 

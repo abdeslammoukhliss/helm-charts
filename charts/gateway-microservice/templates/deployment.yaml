@@ -34,7 +34,7 @@ spec:
     spec:
       restartPolicy: Always
       imagePullSecrets:
-        - name: {{.Values.imagePullSecrets.name | default ""}}
+        - name: {{ include "gateway-microservice.docker-secret.name" . }}
       serviceAccountName: {{ include "gateway-microservice.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}
