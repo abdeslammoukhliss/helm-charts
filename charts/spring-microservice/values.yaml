@@ -36,15 +36,19 @@ selectorLabels:
   app: spring-microservice  # Labels used to select the pods for this service
 
 podSecurityContext:
-  runAsUser: 1010420000
-
+  #runAsUser: 1010420000
+route:
+  enabled: true
+  annotations: {}
+  labels: {}
+  host: ""
 securityContext:
   capabilities:
     drop:
       - ALL  # Drop all Linux capabilities (for security)
   readOnlyRootFilesystem: true  # Make the root filesystem read-only (for security)
   runAsNonRoot: true  # Ensure the container runs as a non-root user
-  runAsUser: 1010420000  # User ID for the container process
+  #runAsUser: 1010420000  # User ID for the container process
 
 logging:
   volume:
