@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "gateway-microservice.fullname" . }}
+  name: {{ include "categories-microservice.fullname" . }}
   namespace: {{ .Values.namespace }}
   labels:
-    {{- include "gateway-microservice.labels" . | nindent 4 }}
+    {{- include "categories-microservice.labels" . | nindent 4 }}
     {{- if .Values.labels }}
       {{- toYaml .Values.labels | nindent 4 }}
     {{- end }}
@@ -16,7 +16,7 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "gateway-microservice.selectorLabels" . | nindent 6 }}
+      {{- include "categories-microservice.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -25,15 +25,15 @@ spec:
           {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
       labels:
-        {{- include "gateway-microservice.selectorLabels" . | nindent 8 }}
+        {{- include "categories-microservice.selectorLabels" . | nindent 8 }}
         {{- if .Values.podLabels }}
         {{- toYaml .Values.podLabels | nindent 8 }}
         {{- end }}
     spec:
       restartPolicy: Always
       imagePullSecrets:
-        - name: {{ include "gateway-microservice.docker-secret.name" . }}
-      serviceAccountName: {{ include "gateway-microservice.serviceAccountName" . }}
+        - name: {{ include "categories-microservice.docker-secret.name" . }}
+      serviceAccountName: {{ include "categories-microservice.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}
       containers:
@@ -112,9 +112,9 @@ spec:
 
           envFrom:
             - configMapRef:
-                name: {{ include "gateway-microservice.fullname" . }}
+                name: {{ include "categories-microservice.fullname" . }}
             - secretRef:
-                name: {{ include "gateway-microservice.fullname" . }}
+                name: {{ include "categories-microservice.fullname" . }}
 
           volumeMounts:
             - name: logging
@@ -131,13 +131,13 @@ spec:
       volumes:
         - name: logging
           configMap:
-            name: {{ include "gateway-microservice.fullname" . }}
+            name: {{ include "categories-microservice.fullname" . }}
             items:
               - key: "logging.yaml"
                 path: logging.yaml
         - name: application
           configMap:
-            name: {{ include "gateway-microservice.fullname" . }}
+            name: {{ include "categories-microservice.fullname" . }}
             items:
               - key: "application.yaml"
                 path: application.yaml

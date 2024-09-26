@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "gateway-microservice.fullname" . }}
+  name: {{ include "gateway-microservice-demo.fullname" . }}
   namespace: {{ .Values.namespace }}
   labels:
-    {{- include "gateway-microservice.labels" . | nindent 4 }}
+    {{- include "gateway-microservice-demo.labels" . | nindent 4 }}
     {{- if .Values.labels }}
       {{- toYaml .Values.labels | nindent 4 }}
     {{- end }}
@@ -13,10 +13,12 @@ metadata:
     {{- toYaml .Values.annotations | nindent 4 }}
   {{- end }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
-      {{- include "gateway-microservice.selectorLabels" . | nindent 6 }}
+      {{- include "gateway-microservice-demo.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -25,15 +27,15 @@ spec:
           {{- toYaml .Values.podAnnotations | nindent 8 }}
         {{- end }}
       labels:
-        {{- include "gateway-microservice.selectorLabels" . | nindent 8 }}
+        {{- include "gateway-microservice-demo.selectorLabels" . | nindent 8 }}
         {{- if .Values.podLabels }}
         {{- toYaml .Values.podLabels | nindent 8 }}
         {{- end }}
     spec:
       restartPolicy: Always
       imagePullSecrets:
-        - name: {{ include "gateway-microservice.docker-secret.name" . }}
-      serviceAccountName: {{ include "gateway-microservice.serviceAccountName" . }}
+        - name: {{ include "gateway-microservice-demo.docker-secret.name" . }}
+      serviceAccountName: {{ include "gateway-microservice-demo.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.securityContext | nindent 8 }}
       containers:
@@ -99,7 +101,7 @@ spec:
             {{- end }}
 
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+          {{- toYaml .Values.resources | nindent 12 }}
 
           env:
             - name: LOG4J_CONFIGURATION_FILE
@@ -112,18 +114,18 @@ spec:
 
           envFrom:
             - configMapRef:
-                name: {{ include "gateway-microservice.fullname" . }}
+                name: {{ include "gateway-microservice-demo.fullname" . }}
             - secretRef:
-                name: {{ include "gateway-microservice.fullname" . }}
+                name: {{ include "gateway-microservice-demo.fullname" . }}
 
           volumeMounts:
             - name: logging
               mountPath: /etc/config/app/logging.yaml
               readOnly: true
               subPath: logging.yaml
-            {{- with .Values.extraVolumeMounts }}
-              {{- toYaml . | nindent 12 }}
-            {{- end }}
+          {{- with .Values.extraVolumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
             - name: application
               mountPath: /etc/config/app/application.yaml
               readOnly: true
@@ -131,13 +133,13 @@ spec:
       volumes:
         - name: logging
           configMap:
-            name: {{ include "gateway-microservice.fullname" . }}
+            name: {{ include "gateway-microservice-demo.fullname" .}}
             items:
               - key: "logging.yaml"
                 path: logging.yaml
         - name: application
           configMap:
-            name: {{ include "gateway-microservice.fullname" . }}
+            name: {{ include "gateway-microservice-demo.fullname" . }}
             items:
               - key: "application.yaml"
                 path: application.yaml

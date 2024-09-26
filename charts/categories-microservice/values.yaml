@@ -9,7 +9,7 @@ replicaCount: 1  # Number of pod replicas to run
 namespace: abdomokh38-dev  # Kubernetes namespace where the application will be deployed
 
 image:
-  repository: 192.9.232.94:8083/repository/docker-repo/gateway-microservice # Docker image repository for the application
+  repository: 192.9.232.94:8083/repository/docker-repo/categories-microservice # Docker image repository for the application
   pullPolicy: Always  # Image pull policy (Always means always pull the image) or IfNotPresent
   tag: 1.0.1  # Docker image tag
 
@@ -37,7 +37,7 @@ podAnnotations:
   sidecar.istio.io/inject: "true"  # Annotation to enable Istio sidecar injection for the pod
 
 selectorLabels:
-  app: gateway-microservice  # Labels used to select the pods for this service
+  app: categories-microservice  # Labels used to select the pods for this service
 
 podSecurityContext:
   runAsUser: 1011600000
@@ -71,17 +71,15 @@ service:
   managementNodePort: null  # NodePort for management endpoints (only relevant for NodePort service type)
   labels:
     prometheus.io/target: spring-boot-actuator-instance  # Label for Prometheus to target this service
-    app: gateway-microservice  # Labels applied to the service
+    app: categories-microservice  # Labels applied to the service
 
-route:
-  enabled: true
 
 extraEnv:
 
 podLabels:
-  app: gateway-microservice  # Labels applied to the pod
+  app: categories-microservice  # Labels applied to the pod
 labels:
-  app: gateway-microservice  # Labels applied to the resources
+  app: categories-microservice  # Labels applied to the resources
 
 secret:
   values:
@@ -220,7 +218,7 @@ affinity:
             - key: "app"  # The label key to match
               operator: "In"  # Operator to match
               values:
-                - "gateway-microservice"  # List of values to match
+                - "categories-microservice"  # List of values to match
         topologyKey: "kubernetes.io/hostname"  # Key to group pods by
 
 metricsConfig:
